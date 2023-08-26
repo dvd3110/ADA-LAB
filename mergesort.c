@@ -1,70 +1,74 @@
-#include <stdio.h>
-#include<time.h>
-clock_t start, end;
+#include<stdio.h>
 
-void merge(int arr[], int low, int mid, int high) {
-  int n1 = mid - low + 1, n2 = high - mid, L[n1], M[n2], i, j, k;
-  for (i = 0; i < n1; i++)
-    L[i] = arr[low + i];
+int mergesort(int a[] , int low , int high )
+{
+    int mid;
+     if(low<high)
+        {
+            mid = (low + high )/ 2;
+            mergesort(a , low , mid );
+            mergesort( a , mid+1 , high);
+            merge(a, low , mid, high);
 
-  for (j = 0; j < n2; j++)
-    M[j] = arr[mid + 1 + j];
+            return 0;
+        }
+}
 
-  i = 0;
-  j = 0;
-  k = low;
-  while (i < n1 && j < n2) {
-    if (L[i] <= M[j]) {
-      arr[k] = L[i];
-      i++;
-    } else {
-      arr[k] = M[j];
-      j++;
+
+int merge(int a[], int low , int mid , int high)
+{
+    int i , j , k , b[20];
+    i=low;
+    j=mid + 1;
+    k=low;
+    while( i<= mid && j <= high)
+    {
+      if(a[i] <  a[j])
+      {
+          b[k]=a[i];
+          i++; k++;
+      }
+      else
+      {
+          b[k]=a[j];
+          j++;k++;
+      }
     }
-    k++;
-  }
-  while (i < n1) {
-    arr[k] = L[i];
-    i++;
-    k++;
-  }
-  while (j < n2) {
-    arr[k] = M[j];
-    j++;
-    k++;
-  }
+      while(i<=mid)
+      {
+          b[k]=a[i];
+          i++; k++;
+      }
+      while(j<=high)
+      {
+          b[k]=a[j];
+          j++; k++;
+      }
+      for(int i=low; i<= high; i ++){
+        a[i]=b[i];
+        printf("\n");
+      }
+      return 0;
+    }
+
+
+void printarray(int a[],int n)
+{
+    for(int i=0; i< n ; i++)
+    printf("%d\t",a[i]);
 }
 
-void mergeSort(int a[], int low, int high) {
-  if (low < high) {
+int main()
+{
+    int n ,i, a[20];
+    printf("Enter the no of elements in the array : ");
+    scanf("%d",&n);
+    printf("Enter the elements  : ");
+    for (int i = 0; i < n ; i++)
+        scanf("%d",&a[i]);
+        printarray(a,n);
+    mergesort( a , 0 , n-1);
+    printarray(a,n);
 
-    int m = low + (high - low) / 2;
-
-    mergeSort(a, low, m);
-    mergeSort(a, m + 1, high);
-    merge(a, low, m, high);
-  }
-}
-
-void printArray(int a[], int size) {
-  for (int i = 0; i < size; i++)
-    printf("%d ", a[i]);
-  printf("\n");
-}
-
-int main() {
-    int n, i, arr[1000];
-    printf("Enter number of elements ):\n");
-    scanf("%d", &n);
-    printf("Enter:\n");
-    for(i = 0; i<n; i++)
-        scanf("%d", &arr[i]);
-
-    start = clock();
-    mergeSort(arr, 0, n - 1);
-    printf("Sorted array: \n");
-    end = clock();
-    printArray(arr, n);
-   printf("Time take: %lf", (((double)end-start)/CLOCKS_PER_SEC));
     return 0;
 }
